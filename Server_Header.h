@@ -38,7 +38,7 @@ typedef struct Client {
 	struct sockaddr_in info_client;
 	int num_sock;
 	char ID[MAX_ID];
-	int login_MODE;                  // Login Mode : 1 - General Mode, 2 - Debug bypass Mode
+	int login_MODE;                  // Login Mode : 1 - General Mode, 2 - System Mode
 }Client;
 
 //Login Structure
