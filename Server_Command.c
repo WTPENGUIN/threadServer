@@ -29,7 +29,7 @@ void * sv_Function(void *arg) {
 			pthread_mutex_lock(&mutex_c);
 			for(i = 0; i < cl_num; i++) {
 				if(cl_socks[i].login_MODE == 2)
-					printf("  %s(%d번 소켓 DEBUG)", cl_socks[i].ID, cl_socks[i].num_sock);
+					printf("  %s(%d번 소켓 SYSTEM)", cl_socks[i].ID, cl_socks[i].num_sock);
 				else
 					printf("  %s(%d번 소켓)", cl_socks[i].ID, cl_socks[i].num_sock);
 			}
