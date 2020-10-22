@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 	Client sock_client;                // Socket Client Structure
 
 	if(argc != 2) {
-		printf("Usage : %s <port>\n", argv[0]);
+		printf("Usage : %s <PORT>\n", argv[0]);
 		exit(1);
 	}
 
