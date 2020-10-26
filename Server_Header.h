@@ -17,8 +17,10 @@
 #include <time.h>
 #include <netinet/in.h>
 
-//for MYSQL(in my case, raspberry-pi use Mariadb)
-#include "/usr/include/mariadb/mysql.h"
+//for MYSQL(Rasbian use Mariadb)
+//for MYSQL(Ubuntu use Mysql)
+//#include "/usr/include/mariadb/mysql.h"
+#include "/usr/include/mysql/mysql.h"
 
 // Define for Client Structure
 #define BUF_SIZE      800
