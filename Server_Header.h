@@ -30,7 +30,7 @@
 
 // Define for MariaDB
 #define DB_HOST   "127.0.0.1"
-#define DB_USER   "penkins"
+#define DB_USER   "dbconnect"
 #define DB_PASS   "5678"
 #define DB_NAME   "ACCOUNT"
 #define DB_PORT   3306
