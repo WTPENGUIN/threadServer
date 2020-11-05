@@ -30,7 +30,9 @@ int auth(Login USER) {
 
 	sprintf(QUERY, "select PASSWD from %s where ID=\"%s\"", table_name, USER.ID);
     query_stat = mysql_query(connection, QUERY);
+    #ifdef __DEBUG_
     printf("%s\n",QUERY);
+    #endif
     
     if (query_stat != 0) {
         fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
