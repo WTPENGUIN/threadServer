@@ -29,7 +29,8 @@ int auth(Login USER) {
     }
 
 	sprintf(QUERY, "select PASSWD from %s where ID=\"%s\"", table_name, USER.ID);
-    query_stat = mysql_query(connection, "select * from USER");
+    query_stat = mysql_query(connection, QUERY);
+    printf("%s\n",QUERY);
     
     if (query_stat != 0) {
         fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
@@ -48,7 +49,7 @@ int auth(Login USER) {
     printf("Auth : %s %s Check\n", sql_row[0], USER.PW);
     #endif
 
-    if(strcmp(sql_row[1], USER.PW) == 0) {
+    if(!strcmp(sql_row[0], USER.PW)) {
         #ifdef __DEBUG_
         printf("Auth Clear.\n");
         #endif
