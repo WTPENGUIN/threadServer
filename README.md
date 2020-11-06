@@ -20,4 +20,8 @@ Client_Accept.c - 클라이언트 접속 요청 처리
 
 Return_Login.c - 접속 요청 시, 로그인 정보를 처리하여 클라이언트 구조체에 정보 복사
 
+Encrpytion.c - 비밀번호 해쉬화 함수입니다.
+
+DB_Command.c - DB에 접속하여 쿼리를 수행하는 함수입니다.
+
 Send_MSG.c - 메세지 전송
