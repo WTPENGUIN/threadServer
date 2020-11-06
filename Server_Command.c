@@ -5,8 +5,10 @@
 
 void * sv_Function(void *arg) {
     int i;
+	char buf_username[50];
+	char buf_password[50];
 
-	printf("명령어 목록 : help, list, quit\n");
+	printf("명령어 목록 : help, list, userlist, adduser, deluser, clear, quit\n");
 
 	while (1) {
 		char bufmsg[512];
@@ -19,12 +21,18 @@ void * sv_Function(void *arg) {
 
 		if (!strcmp(bufmsg, "\n")) continue;     	      // ignore \n
 
-		else if (!strcmp(bufmsg, "help\n"))  {   		  // help command
+		// help command
+		else if (!strcmp(bufmsg, "help\n"))  {
 			printf("help - 도움말\n");
 			printf("list - 현재 클라이언트 리스트 출력\n");
+			printf("userlist - 계정 데이터베이스에 있는 모든 계정 ID를 가져옵니다.\n");
+			printf("adduser <name> <passward> - 계정 데이터베이스에 새로운 계정을 추가합니다.\n");
+			printf("deluser <name> - 계정 데이터베이스에 있는 기존 계정을 삭제합니다.\n");
+			printf("clear - 화면을 지웁니다.\n");
 			printf("quit - 서버 종료\n");
 		}
-		else if (!strcmp(bufmsg, "list\n")) { 	          // list command
+		// list command
+		else if (!strcmp(bufmsg, "list\n")) { 	          
 			printf("현재 접속한 클라이언트 ID : ");
 			pthread_mutex_lock(&mutex_c);
 			for(i = 0; i < cl_num; i++) {
@@ -36,9 +44,73 @@ void * sv_Function(void *arg) {
 			pthread_mutex_unlock(&mutex_c);
 			printf("\n");
 		}
-        else if (!strcmp(bufmsg, "quit\n")) 			   // quit command
+		else if(!strcmp(bufmsg, "userlist\n")) {
+			db_Command("SELECT", "ACCOUNT", "USER", NULL, NULL, 0);
+			printf("\n");
+		}
+		else if(!strcmp(bufmsg, "adduser\n")) {
+			printf("새로운 사용자 이름을 입력해 주세요 : ");
+			fgets(buf_username, 50, stdin);
+
+			if (!strcmp(buf_username, "\n")) {
+				printf("사용자 이름은 공백일 수 없습니다..\n");
+			}
+			
+			for(int i = 0; i <= 50; i++) {
+				if(buf_username[i] == '\n') {
+					buf_username[i] = '\0';
+					break;
+				}
+			}
+
+			printf("비밀번호를 입력해 주세요 : ");
+			fgets(buf_password, 50, stdin);
+
+			if (!strcmp(buf_password, "\n")) {
+				printf("비밀번호는 공백일 수 없습니다..\n");
+			}
+
+			for(int i = 0; i <= 50; i++) {
+				if(buf_password[i] == '\n') {
+					buf_password[i] = '\0';
+					break;
+				}
+			}
+
+			// DB 추가 명령
+			db_Command("INSERT", "ACCOUNT", "USER", buf_username, hash_my_password(buf_password), 0);
+
+			// 버퍼 초기화
+			memset(buf_username, 0, sizeof(buf_username));
+			memset(buf_password, 0, sizeof(buf_password));
+		}
+		else if(!strcmp(bufmsg, "deluser\n")) {
+			printf("삭제할 사용자 이름을 입력해 주세요 : ");
+			fgets(buf_username, 50, stdin);
+
+			if (!strcmp(buf_username, "\n")) {
+				printf("사용자 이름은 공백일 수 없습니다..\n");
+			}
+			
+			for(int i = 0; i <= 50; i++) {
+				if(buf_username[i] == '\n') {
+					buf_username[i] = '\0';
+					break;
+				}
+			}
+
+			// DB 추가명령
+			db_Command("DELETE", "ACCOUNT", "USER", buf_username, NULL, 0);
+
+			//버퍼 초기화
+			memset(buf_username, 0, sizeof(buf_username));
+		}
+		else if(!strcmp(bufmsg, "clear\n")) {
+			system("clear");
+		}
+        else if (!strcmp(bufmsg, "quit\n"))
 			printf("구현중입니다.(임시로 Ctrl + c를 사용하세요.)\n");
-		else //예외 처리
+		else
 			printf("해당 명령어가 없습니다. help를 참조하세요.\n");
 	}
 }
