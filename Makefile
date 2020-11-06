@@ -5,21 +5,21 @@
 CC = gcc
 TARGET = IOT_SERVER
 LIB1 = -lpthread
-LIB2 = -lmariadbclient
+LIB2 = -lmysqlclient
 THREAD_SAFE = -D_REENTRANT
 DEBUG = -D__DEBUG_
 
-$(TARGET): Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o
+$(TARGET): Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o
 	@echo ========================================
 	@echo ========================================
 	@echo Build start.....
-	$(CC) -o IOT_SERVER Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o $(LIB1) $(LIB2) $(THREAD_SAFE)
+	$(CC) -o IOT_SERVER Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o $(LIB1) $(LIB2) $(THREAD_SAFE)
 
-debug : Server_Main_DEBUG CTR_Client_DEBUG Send_MSG_DEBUG Server_Init_DEBUG Client_Accept_DEBUG Return_Login_DEBUG Auth_DEBUG Server_Command_DEBUG
+debug : Server_Main_DEBUG CTR_Client_DEBUG Send_MSG_DEBUG Server_Init_DEBUG Client_Accept_DEBUG Return_Login_DEBUG Auth_DEBUG Server_Command_DEBUG DB_Command_DEBUG Encrpytion_DEBUG
 	@echo ========================================
 	@echo ========================================
 	@echo Build start..... DEBUG MODE
-	$(CC) -o IOT_SERVER_DEBUG Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
+	$(CC) -o IOT_SERVER_DEBUG Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
 
 Server_Main.o : Server_Header.h Server_Main.c
 	@echo ---------------------------------------
@@ -116,6 +116,30 @@ Auth_DEBUG : Server_Header.h Auth.c
 	@echo Compile : Auth.c DEBUG MODE
 	@echo ---------------------------------------
 	$(CC) -c Auth.c $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
+
+DB_Command.o : Server_Header.h DB_Command.c
+	@echo ---------------------------------------
+	@echo Compile : DB_Command.c
+	@echo ---------------------------------------
+	$(CC) -c DB_Command.c $(LIB1) $(LIB2) $(THREAD_SAFE)
+
+DB_Command_DEBUG : Server_Header.h DB_Command.c
+	@echo ---------------------------------------
+	@echo Compile : DB_Command.c DEBUG MODE
+	@echo ---------------------------------------
+	$(CC) -c DB_Command.c $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
+
+Encrpytion.o : Server_Header.h Encrpytion.c
+	@echo ---------------------------------------
+	@echo Compile : Encrpytion.c
+	@echo ---------------------------------------
+	$(CC) -c Encrpytion.c $(LIB1) $(LIB2) $(THREAD_SAFE)
+
+Encrpytion_DEBUG : Server_Header.h Encrpytion.c
+	@echo ---------------------------------------
+	@echo Compile : Encrpytion.c DEBUG MODE
+	@echo ---------------------------------------
+	$(CC) -c Encrpytion.c $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
 	
 clean:
 	rm *.o
