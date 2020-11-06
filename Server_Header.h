@@ -8,6 +8,7 @@
 #define __SERVER_HEADER__
 
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
@@ -40,7 +41,9 @@ typedef struct Client {
 	struct sockaddr_in info_client;
 	int num_sock;
 	char ID[MAX_ID];
-	int login_MODE;                  // Login Mode : 1 - General Mode, 2 - System Mode
+
+	// Login Mode : 1 - General Mode, 2 - System Mode
+	int login_MODE;
 }Client;
 
 //Login Structure
@@ -51,7 +54,7 @@ typedef struct Login {
 }Login;
 
 // Funcion Define
-int server_Init(char *port);                  				  // Server Init Func
+int server_Init(char *port);								  // Server Init Func
 Client cl_Accept(int sv_Sock);                				  // Client connection accept Func
 void * ctr_Client(void * arg);                				  // Client Handle Func(Thread)
 void * sv_Function(void *arg);				  				  // Server Command Func(Thread)
@@ -59,8 +62,14 @@ void config(void);											  // Server Config
 void send_msg(char *msg, int len, int socket_num);            // Message Send Func
 void returnLogin(Login *arg, char *msg);      				  // Token Login Message
 
-// Function Define for Auth with MariaDB
+// Function Define for Auth with Database
 int auth(Login USER);                                   // Authentication Function
+
+// Function Define for DB command in Server
+void db_Command(const char* command, const char* dbname, const char* table_name, const char* username, const char* passwd, const int value);
+
+// Function for Hash Passward
+char* hash_my_password(const char *password);
 
 // Global Variable
 int cl_num;           		 // Client Number
