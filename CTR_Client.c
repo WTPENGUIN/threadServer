@@ -16,9 +16,6 @@ void * ctr_Client(void * arg) {
 
 		if(str_len <= 0)
 			break;
-		
-		if(strstr(msg, "IALIVE") != NULL) // ALIVE CHECK
-			continue;
 
 		send_msg(msg, str_len, CL.num_sock);
 	}
