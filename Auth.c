@@ -5,11 +5,12 @@
 
 int auth(Login USER) {
     
-    MYSQL       *connection=NULL, conn;
-    MYSQL_RES   *sql_result;
-    MYSQL_ROW   sql_row;
-    int         query_stat;
-    char        table_name[5] = "USER"; 
+    MYSQL *connection=NULL, conn;
+    MYSQL_RES *sql_result;
+    MYSQL_ROW sql_row;
+    int query_stat;
+    char db_name[8] = "ACCOUNT";
+    char table_name[5] = "USER"; 
 
     char ID[10];
     char PASSWD[16];
@@ -20,7 +21,7 @@ int auth(Login USER) {
 
     connection = mysql_real_connect(&conn, DB_HOST,
                                     DB_USER, DB_PASS,
-                                    DB_NAME, DB_PORT,
+                                    db_name, DB_PORT,
                                     (char *)NULL, 0);
                                     
     if (connection == NULL) {
