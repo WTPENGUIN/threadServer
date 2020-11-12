@@ -14,9 +14,9 @@ void db_Command(const char* command, const char* dbname, const char* table_name,
 
     mysql_init(&conn);
     
-    connection = mysql_real_connect(&conn, DB_HOST,
-                                    DB_USER, DB_PASS,
-                                    dbname, DB_PORT,
+    connection = mysql_real_connect(&conn, cfg.HOST,
+                                    cfg.USER, cfg.PASS,
+                                    dbname, cfg.PORT,
                                     (char *)NULL, 0);
         
     if (connection == NULL) {
