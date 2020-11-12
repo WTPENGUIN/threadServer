@@ -15,25 +15,22 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include <time.h>
 #include <netinet/in.h>
 
-//for MYSQL(Rasbian use Mariadb)
-//for MYSQL(Ubuntu use Mysql)
+//for Rasbian
 //#include "/usr/include/mariadb/mysql.h"
+
+//for Ubuntu
 #include "/usr/include/mysql/mysql.h"
+
+//USE JSON-C(API Document : http://json-c.github.io/json-c/json-c-0.15/doc/html/index.html)
+#include "/usr/local/include/json-c/json.h"
 
 // Define for Client Structure
 #define BUF_SIZE      800
 #define MAX_CLNT      50
 #define MAX_ID        10
 #define MAX_PASSWD    20
-
-// Define for MariaDB
-#define DB_HOST   "127.0.0.1"
-#define DB_USER   "dbconnect"
-#define DB_PASS   "5678"
-#define DB_PORT   3306
 
 // CLient Structure
 typedef struct Client {
@@ -45,12 +42,20 @@ typedef struct Client {
 	int login_MODE;
 }Client;
 
-//Login Structure
+// Login Structure
 typedef struct Login {
 	char ID[MAX_ID];
 	char PW[MAX_PASSWD];
 	int login_MODE;
 }Login;
+
+// Config Structure
+typedef struct Config {
+    char HOST[16];
+    char USER[21];
+    char PASS[21];
+    int PORT;
+}Config;
 
 // Funcion Define
 int server_Init(char *port);								  // Server Init Func
@@ -60,6 +65,7 @@ void * sv_Function(void *arg);				  				  // Server Command Func(Thread)
 void config(void);											  // Server Config
 void send_msg(char *msg, int len, int socket_num);            // Message Send Func
 void returnLogin(Login *arg, char *msg);      				  // Token Login Message
+void read_Config(void);										  // Read Configure JSON File
 
 // Function Define for Auth with Database
 int auth(Login USER);                                   // Authentication Function
@@ -74,5 +80,6 @@ char* hash_my_password(const char *password);
 int cl_num;           		 // Client Number
 Client cl_socks[MAX_CLNT];   // Client Socket Array
 pthread_mutex_t mutex_c;  	 // Mutex
+Config cfg;					 // Config
 
 #endif
