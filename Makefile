@@ -10,17 +10,17 @@ LIB3 = -ljson-c
 THREAD_SAFE = -D_REENTRANT
 DEBUG = -D__DEBUG_
 
-$(TARGET): Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o
+$(TARGET): Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Token_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o
 	@echo ========================================
 	@echo ========================================
 	@echo Build start.....
-	$(CC) -o IOT_SERVER Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o $(LIB1) $(LIB2) $(LIB3) $(THREAD_SAFE)
+	$(CC) -o IOT_SERVER Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Token_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o $(LIB1) $(LIB2) $(LIB3) $(THREAD_SAFE)
 
-debug : Server_Main_DEBUG CTR_Client_DEBUG Send_MSG_DEBUG Server_Init_DEBUG Client_Accept_DEBUG Return_Login_DEBUG Auth_DEBUG Server_Command_DEBUG DB_Command_DEBUG Encrpytion_DEBUG Config_DEBUG
+debug : Server_Main_DEBUG CTR_Client_DEBUG Send_MSG_DEBUG Server_Init_DEBUG Client_Accept_DEBUG Token_Login_DEBUG Auth_DEBUG Server_Command_DEBUG DB_Command_DEBUG Encrpytion_DEBUG Config_DEBUG
 	@echo ========================================
 	@echo ========================================
 	@echo Build start..... DEBUG MODE
-	$(CC) -o IOT_SERVER_DEBUG Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Return_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o $(LIB1) $(LIB2) $(DEBUG) $(THREAD_SAFE)
+	$(CC) -o IOT_SERVER_DEBUG Server_Main.o CTR_Client.o Send_MSG.o Server_Init.o Client_Accept.o Token_Login.o Auth.o Server_Command.o DB_Command.o Encrpytion.o Config.o $(LIB1) $(LIB2) $(LIB3) $(DEBUG) $(THREAD_SAFE)
 
 Server_Main.o : Server_Header.h Server_Main.c
 	@echo ---------------------------------------
@@ -94,17 +94,17 @@ Client_Accept_DEBUG : Server_Header.h Client_Accept.c
 	@echo ---------------------------------------
 	$(CC) -c Client_Accept.c $(LIB1) $(DEBUG) $(THREAD_SAFE)
 
-Return_Login.o : Server_Header.h Return_Login.c
+Token_Login.o : Server_Header.h Token_Login.c
 	@echo ---------------------------------------
-	@echo Compile : Return_Login.c
+	@echo Compile : Token_Login.c
 	@echo ---------------------------------------
-	$(CC) -c Return_Login.c $(THREAD_SAFE)
+	$(CC) -c Token_Login.c $(THREAD_SAFE)
 
-Return_Login_DEBUG : Server_Header.h Return_Login.c
+Token_Login_DEBUG : Server_Header.h Token_Login.c
 	@echo ---------------------------------------
-	@echo Compile : Return_Login.c DEBUG MODE
+	@echo Compile : Token_Login.c DEBUG MODE
 	@echo ---------------------------------------
-	$(CC) -c Return_Login.c $(DEBUG) $(THREAD_SAFE)
+	$(CC) -c Token_Login.c $(DEBUG) $(THREAD_SAFE)
 
 Auth.o : Server_Header.h Auth.c
 	@echo ---------------------------------------
