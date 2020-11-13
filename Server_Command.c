@@ -15,13 +15,11 @@ void * sv_Function(void *arg) {
 		int command_Number = 0;
 		
 		fprintf(stderr, "\033[1;32m");                    // Text Color : green
-		
 		printf("[SERVER]>");                              // Output cursor
 		fgets(bufmsg, 512, stdin);                        // Input Command
+		if (!strcmp(bufmsg, "\n")) continue;              // ignore \n
 		
-		if (!strcmp(bufmsg, "\n")) continue;     	      // ignore \n
-		
-		// help command
+		// Help command
 		else if (!strcmp(bufmsg, "help\n"))  {
 			printf("help - 도움말\n");
 			printf("list - 현재 클라이언트 리스트 출력\n");
@@ -31,7 +29,7 @@ void * sv_Function(void *arg) {
 			printf("clear - 화면을 지웁니다.\n");
 			printf("quit - 서버 종료\n");
 		}
-		// list command
+		// List command
 		else if (!strcmp(bufmsg, "list\n")) { 	          
 			printf("현재 접속한 클라이언트 ID : ");
 			pthread_mutex_lock(&mutex_c);
@@ -44,12 +42,12 @@ void * sv_Function(void *arg) {
 			pthread_mutex_unlock(&mutex_c);
 			printf("\n");
 		}
-		// 유저 조회 명령어
+		// View user in database
 		else if(!strcmp(bufmsg, "userlist\n")) {
 			db_Command("SELECT", "ACCOUNT", "USER", NULL, NULL, 0);
 			printf("\n");
 		}
-		// 유저 추가 명령어
+		// Add new user in database
 		else if(!strcmp(bufmsg, "adduser\n")) {
 			printf("새로운 사용자 이름을 입력해 주세요 : ");
 			fgets(buf_username, 50, stdin);
@@ -58,7 +56,7 @@ void * sv_Function(void *arg) {
 				printf("사용자 이름은 공백일 수 없습니다..\n");
 			}
 			
-			// 끝에 개행 문자 대신 널 문자로 교체
+			// exchange '\n' to '\0'
 			for(int i = 0; i <= 50; i++) {
 				if(buf_username[i] == '\n') {
 					buf_username[i] = '\0';
@@ -73,7 +71,7 @@ void * sv_Function(void *arg) {
 				printf("비밀번호는 공백일 수 없습니다..\n");
 			}
 
-			// 끝에 개행 문자 대신 널 문자로 교체
+			// exchange '\n' to '\0'
 			for(int i = 0; i <= 50; i++) {
 				if(buf_password[i] == '\n') {
 					buf_password[i] = '\0';
@@ -81,14 +79,14 @@ void * sv_Function(void *arg) {
 				}
 			}
 			
-			// DB 추가 명령
+			// Call db_Command func to add user
 			db_Command("INSERT", "ACCOUNT", "USER", buf_username, hash_my_password(buf_password), 0);
 			
-			// 버퍼 초기화
+			// Init buffer
 			memset(buf_username, 0, sizeof(buf_username));
 			memset(buf_password, 0, sizeof(buf_password));
 		}
-		// 유저 삭제 명령어
+		// Delete user from database
 		else if(!strcmp(bufmsg, "deluser\n")) {
 			printf("삭제할 사용자 이름을 입력해 주세요 : ");
 			fgets(buf_username, 50, stdin);
@@ -97,7 +95,7 @@ void * sv_Function(void *arg) {
 				printf("사용자 이름은 공백일 수 없습니다..\n");
 			}
 			
-			// 끝에 개행 문자 대신 널 문자로 교체
+			// exchange '\n' to '\0'
 			for(int i = 0; i <= 50; i++) {
 				if(buf_username[i] == '\n') {
 					buf_username[i] = '\0';
@@ -105,17 +103,17 @@ void * sv_Function(void *arg) {
 				}
 			}
 			
-			// DB 삭제 명령
+			// Call db_Command func to delete user
 			db_Command("DELETE", "ACCOUNT", "USER", buf_username, NULL, 0);
 			
-			//버퍼 초기화
+			// Init buffer
 			memset(buf_username, 0, sizeof(buf_username));
 		}
-		// 화면 지우기
+		// Clear screen
 		else if(!strcmp(bufmsg, "clear\n")) {
 			system("clear");
 		}
-		// 서버 종료
+		// Shutdown server(work in progress)
 		else if (!strcmp(bufmsg, "quit\n"))
 			printf("구현중입니다.(임시로 Ctrl + c를 사용하세요.)\n");
 		else
