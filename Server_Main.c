@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
 	
-	cl_num = 0;						   // Init Client Socket Number 
+	cl_num = 0;                        // Init Client Socket Number 
 	int sv_Sock, cl_Sock;              // Socket Discripter
 	pthread_t t_id;
 	
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 			continue;                  
 			
 		pthread_mutex_lock(&mutex_c);                 
-		cl_socks[cl_num++] = sock_client; // Socket Insert Array
+		cl_socks[cl_num++] = sock_client;    // Socket Insert Array
 		
 		#ifdef __DEBUG_
 		printf("%d socket! %d\n", sock_client.num_sock, cl_num);
