@@ -44,6 +44,16 @@ int auth(Login USER) {
     // Store result
     sql_result = mysql_store_result(connection);
     sql_row = mysql_fetch_row(sql_result);
+
+    // 해당 ID가 DB에 존재하지 않는 경우
+    if(sql_row == NULL) {
+        #ifdef __DEBUG_
+        printf("No User Find.\n");
+        #endif
+        
+        // 종료
+        return -1;
+    }
     
     //Auth Begin
     #ifdef __DEBUG_
