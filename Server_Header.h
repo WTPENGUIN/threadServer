@@ -64,17 +64,11 @@ void * ctr_Client(void * arg);                				  // Client Handle Func(Thread
 void * sv_Function(void *arg);				  				  // Server Command Func(Thread)
 void config(void);											  // Server Config
 void send_msg(char *msg, int len, int socket_num);            // Message Send Func
-void returnLogin(Login *arg, char *msg);      				  // Token Login Message
+void tokenLogin(Login *arg, char *msg);      				  // Token Login Message
 void read_Config(void);										  // Read Configure JSON File
-
-// Function Define for Auth with Database
-int auth(Login USER);                                   // Authentication Function
-
-// Function Define for DB command in Server
+int auth(Login USER);                                         // Authentication Function
+char* hash_my_password(const char *password);                 // Function for Hash Passward
 void db_Command(const char* command, const char* dbname, const char* table_name, const char* username, const char* passwd, const int value);
-
-// Function for Hash Passward
-char* hash_my_password(const char *password);
 
 // Global Variable
 int cl_num;           		 // Client Number
