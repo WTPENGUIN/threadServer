@@ -13,10 +13,6 @@ void send_msg(char *msg, int len, int socket_num) {
 			continue;
 
 		write(cl_socks[i].num_sock, msg, len);
-
-		#ifdef __DEBUG_
-		printf("%d socket, %s\n", cl_socks[i].num_sock, msg);
-		#endif
 	}
 	pthread_mutex_unlock(&mutex_c);
 }
