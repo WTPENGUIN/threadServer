@@ -9,16 +9,16 @@ const char LOG_ERR_F[]      = "LOGIN_FAILED\n";
 const char LOG_SUC[]        = "LOGIN_SUCCESS\n";
 const char LOG_SUC_DEBUG[]  = "LOGIN_SUCCESS_DEBUG\n";
 
-// Client Connection accept  FORM( ID:PASSWD:LOGINMODE )
+// Client Connection accept *FORM( ID:PASSWD:LOGINMODE )
 Client cl_Accept(int sv_Sock) {
-	int cl_Sock;                   // Client Socket Distritor
-	int cl_size;			       // Client Struct Size
-	int read_b;                    // Read bytes
-	char read_msg[BUF_SIZE];       // Read Message
+	int cl_Sock;                 // Client Socket Distritor
+	int cl_size;                 // Client Struct Size
+	int read_b;                  // Read bytes
+	char read_msg[BUF_SIZE];     // Read Message
 	
-	struct sockaddr_in cl;         // Client Socket Struct 
-	Client __currntClient;         // Client Structure for login success
-	Login __currntLogin;           // LOGIN Structure
+	struct sockaddr_in cl;       // Client Socket Struct 
+	Client __currntClient;       // Client Structure for login success
+	Login __currntLogin;         // LOGIN Structure
 	
 	// init Struct
 	memset(&__currntClient, 0, sizeof(struct Client));
@@ -119,9 +119,9 @@ Client cl_Accept(int sv_Sock) {
 		
 		// Client Structure setting start
 		strncpy(__currntClient.ID, __currntLogin.ID, strlen(__currntLogin.ID)); // ID SET
-		__currntClient.num_sock = cl_Sock;										// Socket Number Set
+		__currntClient.num_sock = cl_Sock;                                      // Socket Number Set
 		memcpy(&(__currntClient.info_client), &cl, sizeof(struct sockaddr_in)); // Socket Structure Set
-		__currntClient.login_MODE = __currntLogin.login_MODE;					// Login Mode Set
+		__currntClient.login_MODE = __currntLogin.login_MODE;                   // Login Mode Set
 		
 		#ifdef __DEBUG_
 		printf("ID(client_debug) : %s Check.\n", __currntClient.ID);
