@@ -3,6 +3,60 @@
 #include "Server_Header.h"
 #endif
 
+// Message Token
+void tokenMessage(char *msg) {
+
+	DB_Command command;
+	char *tempArr[3] = {NULL,NULL,NULL};
+	int i = 0;
+	int isCorrupted = 0;
+
+	memset(&command, 0, sizeof(struct DB_Command));   // init DB structure
+	char *ptr = strtok(msg, ":");
+
+	while(ptr != NULL) {
+
+		if(i >= 3) {
+			isCorrupted = 1;
+			break;
+		}
+
+        tempArr[i] = ptr;
+		i++;
+
+		ptr = strtok(NULL, ":");
+	}
+
+	if(isCorrupted == 1 || tempArr[0] == NULL || tempArr[1] == NULL) {
+		printf("ERROR : Data is Corrupted.\n");
+		return;
+	}
+	else {
+		if(tempArr[2] != NULL) {
+			strncpy(command.command, "INSERT", sizeof(command.command));
+			strncpy(command.db_name, tempArr[0], sizeof(command.db_name));
+			strncpy(command.table_name, "VALUE", sizeof(command.table_name));
+			strncpy(command.arg_name, "NULL", sizeof(command.arg_name));
+			command.value1 = time(NULL);
+			command.value2 = atoi(tempArr[1]);
+			command.value3 = atoi(tempArr[2]);
+
+			db_Command(command);
+		}
+		else {
+			strncpy(command.command, "INSERT", sizeof(command.command));
+			strncpy(command.db_name, tempArr[0], sizeof(command.db_name));
+			strncpy(command.table_name, "VALUE", sizeof(command.table_name));
+			strncpy(command.arg_name, "NULL", sizeof(command.arg_name));
+			command.value1 = time(NULL);
+			command.value2 = atoi(tempArr[1]);
+			command.value3 = 999;
+
+			db_Command(command);
+		}
+	}
+}
+
 // CLient Control Thread Function
 void * ctr_Client(void * arg) {
 	
@@ -25,8 +79,14 @@ void * ctr_Client(void * arg) {
 		#endif
 		
 		// if read() return <=0, break loop and excute disconnect code
-		if(str_len <= 0)
+		if(str_len <= 0) {
 			break;
+		}
+
+		// Sensor Data Token
+		if(strstr(msg, "LIGHT") != NULL || strstr(msg, "HT") != NULL || strstr(msg, "SOUND") != NULL) {
+			tokenMessage(msg);
+		}
 		
 		// Send message to all Client
 		send_msg(msg, str_len, CL.num_sock);
