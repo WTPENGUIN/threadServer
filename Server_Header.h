@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <pthread.h>
@@ -29,7 +30,7 @@
 // Define for Client Structure
 #define BUF_SIZE      800
 #define MAX_CLNT      50
-#define MAX_ID        10
+#define MAX_ID        20
 #define MAX_PASSWD    20
 
 // CLient Structure
@@ -57,18 +58,30 @@ typedef struct Config {
     int PORT;
 }Config;
 
+// DB Structure
+typedef struct DB_Command {
+	char command[7];
+	char db_name[8];
+	char table_name[6];
+	char arg_name[MAX_ID];
+	char arg_pass[MAX_PASSWD];
+	int value1;
+	int value2;
+	int value3;
+}DB_Command;
+
 // Funcion Define
-int server_Init(char *port);								  // Server Init Func
-Client cl_Accept(int sv_Sock);                				  // Client connection accept Func
-void * ctr_Client(void * arg);                				  // Client Handle Func(Thread)
-void * sv_Function(void *arg);				  				  // Server Command Func(Thread)
-void config(void);											  // Server Config
+int server_Init(char *port);                                  // Server Init Func
+Client cl_Accept(int sv_Sock);                                // Client connection accept Func
+void * ctr_Client(void * arg);                                // Client Handle Func(Thread)
+void * sv_Function(void *arg);                                // Server Command Func(Thread)
+void config(void);                                            // Server Config
 void send_msg(char *msg, int len, int socket_num);            // Message Send Func
-void tokenLogin(Login *arg, char *msg);      				  // Token Login Message
-void read_Config(void);										  // Read Configure JSON File
+void tokenLogin(Login *arg, char *msg);                       // Token Login Message
+void read_Config(void);                                       // Read Configure JSON File
 int auth(Login USER);                                         // Authentication Function
 char* hash_my_password(const char *password);                 // Function for Hash Passward
-void db_Command(const char* command, const char* dbname, const char* table_name, const char* username, const char* passwd, const int value);
+void db_Command(DB_Command com);                              // Function for DB
 
 // Global Variable
 int cl_num;           		 // Client Number
