@@ -7,7 +7,8 @@ void * sv_Function(void *arg) {
 	
 	char buf_username[50];
 	char buf_password[50];
-	
+	DB_Command command;
+
 	printf("명령어 목록 : help, list, userlist, adduser, deluser, clear, quit\n");
 	
 	while (1) {
@@ -17,8 +18,11 @@ void * sv_Function(void *arg) {
 		fprintf(stderr, "\033[1;32m");                    // Text Color : green
 		printf("[SERVER]>");                              // Output cursor
 		fgets(bufmsg, 512, stdin);                        // Input Command
-		if (!strcmp(bufmsg, "\n")) continue;              // ignore \n
-		
+		memset(&command, 0, sizeof(struct DB_Command));   // init DB structure
+
+		// ignore \n
+		if (!strcmp(bufmsg, "\n")) continue;
+
 		// Help command
 		else if (!strcmp(bufmsg, "help\n"))  {
 			printf("help - 도움말\n");
@@ -44,8 +48,11 @@ void * sv_Function(void *arg) {
 		}
 		// View user in database
 		else if(!strcmp(bufmsg, "userlist\n")) {
-			db_Command("SELECT", "ACCOUNT", "USER", NULL, NULL, 0);
-			printf("\n");
+			strncpy(command.command, "SELECT", sizeof(command.command));
+			strncpy(command.db_name, "ACCOUNT", sizeof(command.db_name));
+			strncpy(command.table_name, "USER", sizeof(command.table_name));
+
+			db_Command(command);
 		}
 		// Add new user in database
 		else if(!strcmp(bufmsg, "adduser\n")) {
@@ -80,7 +87,12 @@ void * sv_Function(void *arg) {
 			}
 			
 			// Call db_Command func to add user
-			db_Command("INSERT", "ACCOUNT", "USER", buf_username, hash_my_password(buf_password), 0);
+			strncpy(command.command, "INSERT", sizeof(command.command));
+			strncpy(command.db_name, "ACCOUNT", sizeof(command.db_name));
+			strncpy(command.table_name, "USER", sizeof(command.table_name));
+			strncpy(command.arg_name, buf_username, sizeof(command.arg_name));
+			strncpy(command.arg_pass, hash_my_password(buf_password), sizeof(command.arg_pass));
+			db_Command(command);
 			
 			// Init buffer
 			memset(buf_username, 0, sizeof(buf_username));
@@ -104,7 +116,11 @@ void * sv_Function(void *arg) {
 			}
 			
 			// Call db_Command func to delete user
-			db_Command("DELETE", "ACCOUNT", "USER", buf_username, NULL, 0);
+			strncpy(command.command, "DELETE", sizeof(command.command));
+			strncpy(command.db_name, "ACCOUNT", sizeof(command.db_name));
+			strncpy(command.table_name, "USER", sizeof(command.table_name));
+			strncpy(command.arg_name, buf_username, sizeof(command.arg_name));
+			db_Command(command);
 			
 			// Init buffer
 			memset(buf_username, 0, sizeof(buf_username));
