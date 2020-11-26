@@ -7,20 +7,26 @@
 void tokenLogin(Login *arg, char *msg) {
 
     char *tempArr[3] = {NULL,NULL,NULL};
-    int i = 0;
+    int count = 0;
+    int isCorrupted = 0;
 
 	char *ptr = strtok(msg, ":");
 
 	while(ptr != NULL) {
 
-        tempArr[i] = ptr;
-        i++;
+        if(count > 3) {
+            isCorrupted = 1;
+			break;
+        }
+
+        tempArr[count] = ptr;
+        count++;
 
 		ptr = strtok(NULL, ":");
 	}
 
     //strtok fail
-    if(tempArr[1] == NULL) { // PW token fail
+    if(isCorrupted == 1 || count != 3) {
         strcpy(arg->ID, "FAIL");
         strcpy(arg->PW, "FAIL");
         arg->login_MODE = -1;
