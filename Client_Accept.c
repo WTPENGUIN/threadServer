@@ -105,7 +105,7 @@ Client cl_Accept(int sv_Sock) {
 	pthread_mutex_unlock(&mutex_c);
 	
 	#ifdef __DEBUG_
-	printf("ID : %s, PASSWORD(HASH) : %s LOGIN MODE : %d\n", __currntLogin.ID, __currntLogin.PW , __currntLogin.login_MODE);
+	printf("ID : %s, PASSWORD(HASH) : %s LOGIN MODE : %d\n", __currentLogin.ID, __currentLogin.PW , __currentLogin.login_MODE);
 	#endif
 	
 	// Login Mode Check
